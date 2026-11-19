@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { analyzeRules, type AnalysisResult, type Verdict } from 'scam-shield-core'
 import { EXAMPLES, type ExampleId } from './examples'
 
@@ -14,6 +14,12 @@ function verdictClass(v: Verdict): string {
   return 'verdict-scam'
 }
 
+function demoFromQuery(): ExampleId | null {
+  const q = new URLSearchParams(window.location.search).get('demo')
+  if (q === 'estafa' || q === 'seguro' || q === 'paypal') return q
+  return null
+}
+
 export default function App() {
   const [text, setText] = useState('')
   const [result, setResult] = useState<AnalysisResult | null>(null)
@@ -21,11 +27,22 @@ export default function App() {
 
   const canAnalyze = useMemo(() => text.trim().length > 0, [text])
 
-  function loadExample(id: ExampleId) {
-    setText(EXAMPLES[id].text)
+  function loadExample(id: ExampleId, analyze = false) {
+    const sample = EXAMPLES[id].text
+    setText(sample)
     setActiveChip(id)
-    setResult(null)
+    if (analyze) {
+      setResult(analyzeRules({ text: sample, locale: 'es' }))
+    } else {
+      setResult(null)
+    }
   }
+
+  useEffect(() => {
+    const demo = demoFromQuery()
+    if (demo) loadExample(demo, true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function onAnalyze() {
     const trimmed = text.trim()
