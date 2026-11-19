@@ -1,0 +1,26 @@
+# Dependencies & build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Env / secrets — never commit credentials
+.env
+.env.*
+!.env.example
+
+# Kane / TestMu local run output
+.testmuai/last-run.ndjson
+.testmuai/output-*/
+.testmuai/*.log
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
