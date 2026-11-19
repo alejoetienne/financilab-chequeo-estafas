@@ -1,6 +1,6 @@
-# Dependencies & build
-node_modules/
-dist/
+# Dependencies & build (app only — keep vendored library dist)
+/node_modules/
+/dist/
 dist-ssr/
 *.local
 
